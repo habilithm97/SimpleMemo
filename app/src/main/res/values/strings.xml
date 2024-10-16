@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SimpleMemo</string>
+    <string name="content">Content</string>
+    <string name="date">Date</string>
 </resources>

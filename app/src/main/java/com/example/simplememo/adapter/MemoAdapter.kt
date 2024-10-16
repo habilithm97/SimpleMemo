@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.simplememo.databinding.ItemMemoBinding
+import com.example.simplememo.room.Memo
 
 class MemoAdapter : ListAdapter<Memo, MemoAdapter.MemoViewHolder>(DIFF_CALLBACK) {
 

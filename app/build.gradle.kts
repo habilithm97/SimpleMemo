@@ -50,7 +50,11 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+
+    // LiveData
+    implementation(libs.lifecycle.livedata.ktx)
 }

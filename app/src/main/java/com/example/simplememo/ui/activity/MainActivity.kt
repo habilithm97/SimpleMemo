@@ -31,6 +31,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
         binding.apply {
+            setSupportActionBar(toolbar)
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean { // 툴바 뒤로가기 버튼 처리
+        onBackPressed()
+        return true // 직접 정의한 동작 수행
+    }
+
+    override fun onBackPressed() { // 백스택 관리
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            // 백스택에 프래그먼트가 없으면 기본 뒤로가기 동작 수행
+            super.onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    // MemoFragment에서만 뒤로가기 버튼을 보이게 하기
+    fun showBackButton(show: Boolean) {
+        supportActionBar?.setDisplayHomeAsUpEnabled(show)
     }
 }

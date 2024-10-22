@@ -1,10 +1,12 @@
 package com.example.simplememo.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import com.example.simplememo.R
 import com.example.simplememo.databinding.FragmentMemoBinding
@@ -33,6 +35,14 @@ class MemoFragment : Fragment() {
 
         // MainActivity 툴바에 뒤로가기 버튼 활성화
         (activity as? MainActivity)?.showBackButton(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        binding.edtMemo.requestFocus()
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(binding.edtMemo, InputMethodManager.SHOW_IMPLICIT)
     }
 
     override fun onPause() {

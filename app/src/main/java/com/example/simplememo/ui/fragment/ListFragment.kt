@@ -45,9 +45,14 @@ class ListFragment : Fragment() {
                     .addToBackStack(null) // 백스택에 추가
                     .commit()
             }
-        }
-        memoViewModel.getAll.observe(viewLifecycleOwner) {
-            memoAdapter.submitList(it)
+            memoViewModel.getAll.observe(viewLifecycleOwner) {
+                memoAdapter.submitList(it) {
+                    val itemCount = memoAdapter.itemCount
+                    if(itemCount > 0) {
+                        recyclerView.smoothScrollToPosition(itemCount - 1) // 마지막 아이템 위치로 자동 스크롤
+                    }
+                }
+            }
         }
     }
 

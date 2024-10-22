@@ -3,4 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <EditText
+        android:id="@+id/edtMemo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:gravity="top|start"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:scrollbars="vertical" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

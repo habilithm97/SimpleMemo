@@ -5,15 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simplememo.R
 import com.example.simplememo.adapter.MemoAdapter
 import com.example.simplememo.databinding.FragmentListBinding
+import com.example.simplememo.viewmodel.MemoViewModel
 
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private val memoAdapter by lazy { MemoAdapter() }
+    private val memoViewModel: MemoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +45,9 @@ class ListFragment : Fragment() {
                     .addToBackStack(null) // 백스택에 추가
                     .commit()
             }
+        }
+        memoViewModel.getAll.observe(viewLifecycleOwner) {
+            memoAdapter.submitList(it)
         }
     }
 

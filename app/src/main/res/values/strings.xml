@@ -2,4 +2,6 @@
     <string name="app_name">SimpleMemo</string>
     <string name="content">Content</string>
     <string name="date">Date</string>
+    <string name="memo">메모</string>
+    <string name="date_format">yyyy. MM. dd.</string>
 </resources>

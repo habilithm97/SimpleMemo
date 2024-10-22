@@ -57,5 +57,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     // LiveData
-    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    implementation(libs.androidx.fragment.ktx)
 }

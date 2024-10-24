@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simplememo.R
 import com.example.simplememo.adapter.MemoAdapter
@@ -16,8 +15,11 @@ import com.example.simplememo.viewmodel.MemoViewModel
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
-    private val memoAdapter by lazy { MemoAdapter() }
     private val memoViewModel: MemoViewModel by viewModels()
+
+    companion object {
+        const val MEMO = "memo"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +31,18 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val memoAdapter = MemoAdapter { memo -> // 클릭 리스너에서 memo를 전달 받음
+            val memoFragment = MemoFragment().apply {
+                arguments = Bundle().apply { // MemoFragment에 전달할 데이터를 담은 번들 생성
+                    putParcelable(MEMO, memo)
+                }
+            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.container, memoFragment)
+                .addToBackStack(null)
+                .commit()
+        }
 
         binding.apply {
             recyclerView.apply {

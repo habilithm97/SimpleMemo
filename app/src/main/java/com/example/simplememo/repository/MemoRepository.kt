@@ -10,7 +10,10 @@ class MemoRepository(private val memoDao: MemoDao) {
         memoDao.addMemo(memo)
     }
     suspend fun updateMemo(memo: Memo) {
-        memoDao.addMemo(memo)
+        memoDao.updateMemo(memo)
+    }
+    suspend fun deleteMemo(memo: Memo) {
+        memoDao.deleteMemo(memo)
     }
     val getAll: Flow<List<Memo>> = memoDao.getAll()
 }

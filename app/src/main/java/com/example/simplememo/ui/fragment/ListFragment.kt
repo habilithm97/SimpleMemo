@@ -1,5 +1,6 @@
 package com.example.simplememo.ui.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simplememo.R
 import com.example.simplememo.adapter.MemoAdapter
 import com.example.simplememo.databinding.FragmentListBinding
+import com.example.simplememo.room.Memo
 import com.example.simplememo.viewmodel.MemoViewModel
 
 class ListFragment : Fragment() {
@@ -32,17 +34,20 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val memoAdapter = MemoAdapter { memo -> // 클릭 리스너에서 memo를 전달 받음
-            val memoFragment = MemoFragment().apply {
-                arguments = Bundle().apply { // MemoFragment에 전달할 데이터를 담은 번들 생성
-                    putParcelable(MEMO, memo)
+        val memoAdapter = MemoAdapter(
+            onItemClick = { memo -> // 클릭 리스너에서 memo를 전달 받음
+                val memoFragment = MemoFragment().apply {
+                    arguments = Bundle().apply { // MemoFragment에 전달할 데이터를 담은 번들 생성
+                        putParcelable(MEMO, memo)
+                    }
                 }
-            }
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.container, memoFragment)
-                .addToBackStack(null)
-                .commit()
-        }
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.container, memoFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }, onItemLongClick = { memo ->
+                showDeleteDialog(memo)
+            })
 
         binding.apply {
             recyclerView.apply {
@@ -62,12 +67,27 @@ class ListFragment : Fragment() {
             memoViewModel.getAll.observe(viewLifecycleOwner) {
                 memoAdapter.submitList(it) {
                     val itemCount = memoAdapter.itemCount
-                    if(itemCount > 0) {
+                    if (itemCount > 0) {
                         recyclerView.smoothScrollToPosition(itemCount - 1) // 마지막 아이템 위치로 자동 스크롤
                     }
                 }
             }
         }
+    }
+
+    private fun showDeleteDialog(memo: Memo) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("삭제")
+            .setMessage("선택한 메모를 삭제할까요 ?")
+            .setPositiveButton(getString(R.string.delete)) { dialog, _ ->
+                memoViewModel.deleteMemo(memo)
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 
     override fun onDestroyView() {

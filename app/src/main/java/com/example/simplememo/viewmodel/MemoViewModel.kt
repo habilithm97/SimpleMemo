@@ -31,7 +31,9 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
 
     fun updateMemo(memo: Memo) {
         viewModelScope.launch(Dispatchers.IO) {
-            memoRepository.updateMemo(memo)
+            // 메모 삭제 후 다시 추가 -> 메모 수정 시 리스트 마지막 위치로 메모 이동
+            memoRepository.deleteMemo(memo) // 삭제 -> 리스트 순서 조정
+            memoRepository.addMemo(memo.copy(id = 0)) // id = 0 -> 새로운 항목으로 처리
         }
     }
 
@@ -41,3 +43,8 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 }
+/**
+ * viewModelScope
+  -ViewModel에서 코루틴을 관리하기 위한 스코프
+  -ViewModel이 사라질 때 함께 취소되므로, 메모리 릭 없는 안전한 비동기 작업 수행 가능
+ */

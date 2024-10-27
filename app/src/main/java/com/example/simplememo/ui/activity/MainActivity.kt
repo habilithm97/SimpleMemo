@@ -1,6 +1,8 @@
 package com.example.simplememo.ui.activity
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -52,5 +54,19 @@ class MainActivity : AppCompatActivity() {
     // MemoFragment에서만 뒤로가기 버튼을 보이게 하기
     fun showBackButton(show: Boolean) {
         supportActionBar?.setDisplayHomeAsUpEnabled(show)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.options_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.select -> {
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

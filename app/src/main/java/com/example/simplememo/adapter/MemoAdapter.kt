@@ -31,6 +31,7 @@ class MemoAdapter(private val onItemClick: (Memo) -> Unit,
                     }
                 }
             }
+
         private fun showPopupMenu(view: View, memo: Memo) {
             val popup = PopupMenu(view.context, view)
             popup.menuInflater.inflate(R.menu.memo_context_menu, popup.menu)

@@ -22,7 +22,8 @@ class MemoFragment : Fragment() {
     private var _binding: FragmentMemoBinding? = null
     private val binding get() = _binding!!
     private val memoViewModel: MemoViewModel by viewModels()
-    private var memo: Memo? = null // 전달 받은 메모를 저장
+    private var memo: Memo? = null // 전달 받은 메모
+    private var prevMemo: String? = null // 수정 전 메모
 
     companion object {
         const val MEMO = "memo"
@@ -46,6 +47,7 @@ class MemoFragment : Fragment() {
         }
         memo?.let { // memo가 있으면 수정 모드
             binding.edtMemo.setText(it.content)
+            prevMemo = it.content
         }
 
         // MainActivity 툴바에 뒤로가기 버튼 활성화
@@ -65,7 +67,7 @@ class MemoFragment : Fragment() {
 
         val memoStr = binding.edtMemo.text.toString()
 
-        if (memoStr.isNotBlank()) {
+        if (memoStr.isNotBlank() && memoStr != prevMemo) {
             memo?.let { // memo가 있으면 수정 모드
                 updateMemo(memoStr)
             } ?: run { // memo가 없으면 추가 모드

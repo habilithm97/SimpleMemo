@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="@{memo.date}" />
+                android:text="@{memo.updateDate}" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

@@ -1,5 +1,6 @@
 package com.example.simplememo.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +11,29 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.simplememo.R
 import com.example.simplememo.databinding.ItemMemoBinding
 import com.example.simplememo.room.Memo
+import com.example.simplememo.viewmodel.SortOrder
 
 class MemoAdapter(private val onItemClick: (Memo) -> Unit,
-                  private val onItemLongClick: (Memo) -> Unit)
-    : ListAdapter<Memo, MemoAdapter.MemoViewHolder>(DIFF_CALLBACK) {
+                  private val onItemLongClick: (Memo) -> Unit
+) : ListAdapter<Memo, MemoAdapter.MemoViewHolder>(DIFF_CALLBACK) {
+
+    var currentSortOrder: SortOrder = SortOrder.UPDATE_DATE
 
     inner class MemoViewHolder(private val binding: ItemMemoBinding) :
         RecyclerView.ViewHolder(binding.root) {
             fun bind(memo: Memo) {
                 binding.apply {
                     this.memo = memo // XML에서 직접 데이터를 참조하여 자동으로 UI 업데이트
+
+                    // SortOrder에 따라 표시하는 데이터 조정
+                    tvDate.text = when (currentSortOrder) {
+                        SortOrder.CREATE_DATE -> memo.createDate
+                        SortOrder.UPDATE_DATE -> {
+                            tvDate.setTextColor(Color.BLUE)
+                            memo.updateDate
+                        }
+                    }
+
                     executePendingBindings() // 지연된 바인딩을 즉시 실행하여 데이터가 뷰에 반영되도록 함
 
                     root.setOnClickListener {

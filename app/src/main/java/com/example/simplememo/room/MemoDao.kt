@@ -19,6 +19,9 @@ interface MemoDao {
     @Delete
     suspend fun deleteMemo(memo: Memo)
 
-    @Query("select * from memo order by id")
-    fun getAll(): Flow<List<Memo>>
+    @Query("select * from memo order by createDate")
+    fun getAllSortCreate(): Flow<List<Memo>>
+
+    @Query("select * from memo order by updateDate")
+    fun getAllSortUpdate(): Flow<List<Memo>>
 }

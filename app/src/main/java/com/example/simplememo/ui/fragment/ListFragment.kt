@@ -13,6 +13,7 @@ import com.example.simplememo.adapter.MemoAdapter
 import com.example.simplememo.databinding.FragmentListBinding
 import com.example.simplememo.room.Memo
 import com.example.simplememo.viewmodel.MemoViewModel
+import com.example.simplememo.viewmodel.SortOrder
 
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
@@ -46,8 +47,8 @@ class ListFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
             }, onItemLongClick = { memo ->
-                showDeleteDialog(memo)
-            })
+                showDeleteDialog(memo) }
+        )
 
         binding.apply {
             recyclerView.apply {
@@ -64,8 +65,9 @@ class ListFragment : Fragment() {
                     .addToBackStack(null) // 백스택에 추가
                     .commit()
             }
-            memoViewModel.getAll.observe(viewLifecycleOwner) {
-                memoAdapter.submitList(it) {
+            memoViewModel.getAll.observe(viewLifecycleOwner) { memoList ->
+                memoAdapter.currentSortOrder = memoViewModel.sortOrder.value ?: SortOrder.UPDATE_DATE
+                memoAdapter.submitList(memoList) {
                     val itemCount = memoAdapter.itemCount
                     if (itemCount > 0) {
                         recyclerView.smoothScrollToPosition(itemCount - 1) // 마지막 아이템 위치로 자동 스크롤

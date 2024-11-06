@@ -80,12 +80,15 @@ class MemoFragment : Fragment() {
         val dateFormat = SimpleDateFormat(getString(R.string.date_format), Locale.getDefault())
         val date = dateFormat.format(Date())
 
-        val memo = Memo(memoStr, date)
+        val memo = Memo(memoStr, createDate = date, updateDate = date)
         memoViewModel.addMemo(memo)
     }
 
     private fun updateMemo(memoStr: String) {
-        val updatedMemo = memo?.copy(content = memoStr) // 내용만 수정된 메모 생성
+        val dateFormat = SimpleDateFormat(getString(R.string.date_format), Locale.getDefault())
+        val date = dateFormat.format(Date())
+
+        val updatedMemo = memo?.copy(content = memoStr, updateDate = date) // 내용만 수정된 메모 생성
         updatedMemo?.let {
             memoViewModel.updateMemo(it) // ViewModel에서 메모 업데이트
         }

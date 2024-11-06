@@ -3,7 +3,9 @@ package com.example.simplememo.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.simplememo.repository.MemoRepository
 import com.example.simplememo.room.Memo
@@ -11,15 +13,25 @@ import com.example.simplememo.room.MemoDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+enum class SortOrder {
+    CREATE_DATE, UPDATE_DATE
+}
+
 // Repository를 통해 DB와 상호작용, UI에 필요한 데이터를 제공
 class MemoViewModel(application: Application) : AndroidViewModel(application) {
     private val memoRepository: MemoRepository
     val getAll: LiveData<List<Memo>>
+    
+    private val _sortOrder = MutableLiveData(SortOrder.UPDATE_DATE) // 기본값 = 수정 날짜 순
+    val sortOrder: LiveData<SortOrder> = _sortOrder
 
     init {
         val memoDao = MemoDB.getInstance(application).memoDao()
         memoRepository = MemoRepository(memoDao)
-        getAll = memoRepository.getAll.asLiveData()
+        // _sortOrder의 값에 따라 getAll의 데이터가 동적으로 변함
+        getAll = _sortOrder.switchMap { order ->
+            memoRepository.getAllSort(order).asLiveData()
+        }
     }
 
     fun addMemo(memo: Memo) {
@@ -41,6 +53,10 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             memoRepository.deleteMemo(memo)
         }
+    }
+
+    fun setSortOrder(order: SortOrder) {
+        _sortOrder.value = order
     }
 }
 /**

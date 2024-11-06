@@ -4,15 +4,19 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.simplememo.R
 import com.example.simplememo.databinding.ActivityMainBinding
 import com.example.simplememo.ui.fragment.ListFragment
+import com.example.simplememo.viewmodel.MemoViewModel
+import com.example.simplememo.viewmodel.SortOrder
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val memoViewModel: MemoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +68,21 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.select -> {
+                true
+            }
+            R.id.sort -> {
+                val newSortOrder = if(memoViewModel.sortOrder.value == SortOrder.CREATE_DATE) {
+                    SortOrder.UPDATE_DATE
+                } else {
+                    SortOrder.CREATE_DATE
+                }
+                memoViewModel.setSortOrder(newSortOrder)
+
+                item.title = if (newSortOrder == SortOrder.UPDATE_DATE) {
+                    getString(R.string.update_date)
+                } else {
+                    getString(R.string.create_date)
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

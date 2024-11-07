@@ -6,6 +6,14 @@
         android:title="@string/select" />
     <item
         android:id="@+id/sort"
-        android:title="@string/update_date"
-        app:showAsAction="always" />
+        android:title="@string/sort">
+        <menu>
+            <item
+                android:id="@+id/createDate"
+                android:title="@string/create_date" />
+            <item
+                android:id="@+id/updateDate"
+                android:title="@string/update_date" />
+        </menu>
+    </item>
 </menu>

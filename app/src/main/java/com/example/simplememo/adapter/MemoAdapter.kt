@@ -18,6 +18,11 @@ class MemoAdapter(private val onItemClick: (Memo) -> Unit,
 ) : ListAdapter<Memo, MemoAdapter.MemoViewHolder>(DIFF_CALLBACK) {
 
     var currentSortOrder: SortOrder = SortOrder.UPDATE_DATE
+        set(value) {
+            field = value
+            // currentSortOrder가 변경될 때마다 데이터 갱신
+            submitList(currentList) // 현재 리스트를 submit하여 새로 갱신
+        }
 
     inner class MemoViewHolder(private val binding: ItemMemoBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -27,13 +32,15 @@ class MemoAdapter(private val onItemClick: (Memo) -> Unit,
 
                     // SortOrder에 따라 표시하는 데이터 조정
                     tvDate.text = when (currentSortOrder) {
-                        SortOrder.CREATE_DATE -> memo.createDate
+                        SortOrder.CREATE_DATE -> {
+                            tvDate.setTextColor(Color.BLACK)
+                            memo.createDate
+                        }
                         SortOrder.UPDATE_DATE -> {
                             tvDate.setTextColor(Color.BLUE)
                             memo.updateDate
                         }
                     }
-
                     executePendingBindings() // 지연된 바인딩을 즉시 실행하여 데이터가 뷰에 반영되도록 함
 
                     root.setOnClickListener {

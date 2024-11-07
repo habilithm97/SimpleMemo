@@ -70,19 +70,12 @@ class MainActivity : AppCompatActivity() {
             R.id.select -> {
                 true
             }
-            R.id.sort -> {
-                val newSortOrder = if(memoViewModel.sortOrder.value == SortOrder.CREATE_DATE) {
-                    SortOrder.UPDATE_DATE
-                } else {
-                    SortOrder.CREATE_DATE
-                }
-                memoViewModel.setSortOrder(newSortOrder)
-
-                item.title = if (newSortOrder == SortOrder.UPDATE_DATE) {
-                    getString(R.string.update_date)
-                } else {
-                    getString(R.string.create_date)
-                }
+            R.id.createDate -> {
+                memoViewModel.setSortOrder(SortOrder.CREATE_DATE)
+                true
+            }
+            R.id.updateDate -> {
+                memoViewModel.setSortOrder(SortOrder.UPDATE_DATE)
                 true
             }
             else -> super.onOptionsItemSelected(item)
